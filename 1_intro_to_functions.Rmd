@@ -169,7 +169,7 @@ Even if your function call works, why is my function "brittle?"
 
 Hint: hardcoding `q_cfs = X_00060_00003` could be dangerous
 
-It didn't work for Texas site or Mississippi ecause they named thier data different than Colorado or New Mexico
+It didn't work for Texas site or Mississippi because they named thier data different than Colorado or New Mexico. Avoid hard coding ideally.
 
 ```{r}
 colorado_q <- q_downloader(site_no = '07096000',
@@ -189,7 +189,12 @@ to write a function that joins your two USGS datasets by calling one of the fami
 Hint: be careful of having two `site` columns. 
 
 ```{r}
-
+join_two_sets <- function(data_left,data_right,name_left,name_right){
+  new_combo_wide <- left_join(data_left,data_right, by = 'Date') %>%
+    select(Date,q_cfs.x,q_cfs.y) %>%
+    rename(q_cfs.x = name_left, q_cfs.y = name_right)
+}
+new_combo_data <- join_two_sets(colorado_q,nmexico_q,colorado,new_mexico)
 ```
 
 
