@@ -191,8 +191,9 @@ Hint: be careful of having two `site` columns.
 ```{r}
 join_two_sets <- function(data_left,data_right,name_left,name_right){
   new_combo_wide <- left_join(data_left,data_right, by = 'Date') %>%
-    select(Date,name_left,name_right) %>%
-    rename(q_cfs.x = name_left, q_cfs.y = name_right)
+    rename(q_cfs.x = name_left, q_cfs.y = name_right) %>%
+    select(Date,name_left,name_right)
+    
 }
 new_combo_data <- join_two_sets(colorado_q,nmexico_q,colorado,new_mexico)
 ```
