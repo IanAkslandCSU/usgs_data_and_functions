@@ -153,7 +153,11 @@ plot). Please plot the `combo_data` dataset here.
 
 
 ```{r}
-
+ggplot_funct <- function(data){ggs <- ggplot(data,aes(x=Date,y=q_cfs,color=site)) + 
+  geom_line() 
+return(ggs)
+}
+ggplot_funct(combo_data)
 ```
 
 
@@ -165,8 +169,13 @@ Even if your function call works, why is my function "brittle?"
 
 Hint: hardcoding `q_cfs = X_00060_00003` could be dangerous
 
-```{r}
+It didn't work for Texas site or Mississippi ecause they named thier data different than Colorado or New Mexico
 
+```{r}
+colorado_q <- q_downloader(site_no = '07096000',
+                          site_id = 'ARKANSAS RIVER AT CANON CITY, CO.')
+nmexico_q <- q_downloader(site_no = '08383500',
+                          site_id = 'PECOS RIVER NEAR PUERTO DE LUNA, NM')
 ```
 
 
