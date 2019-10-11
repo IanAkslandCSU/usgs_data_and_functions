@@ -189,13 +189,16 @@ to write a function that joins your two USGS datasets by calling one of the fami
 Hint: be careful of having two `site` columns. 
 
 ```{r}
-join_two_sets <- function(data_left,data_right,name_left,name_right){
-  new_combo_wide <- left_join(data_left,data_right, by = 'Date') %>%
-    rename(q_cfs.x = name_left, q_cfs.y = name_right) %>%
-    select(Date,name_left,name_right)
+combo_data_co_nm <- bind_rows(colorado_q,nmexico_q)
+
+join_two_sets <- function(data_left,data_right){
+  combo_data_new <- bind_rows(data_left,data_right) %>%
+
+  select(-site_no,-q_cd,-agency_cd) %>%
+  spread(key=site,value=q_cfs)
     
 }
-new_combo_data <- join_two_sets(colorado_q,nmexico_q,colorado,new_mexico)
+new_combo_data <- join_two_sets(colorado_q,nmexico_q)
 ```
 
 
@@ -206,7 +209,17 @@ a dygraph. Here, I want you to make a similar function that preps *and* plots a 
 
 
 ```{r}
+xts_maker_graph <- function(df_wide,columnNameOne,columnNameTwo){
+  wide_data <- df_wide
 
+  wide_xts <- xts(wide_data %>%
+                  select(columnNameOne,columnNameTwo),
+                order.by = wide_data$Date)
+  
+  dygraph(wide_xts)
+}
+
+xts_maker_graph(new_combo_data,'ARKANSAS RIVER AT CANON CITY, CO.','PECOS RIVER NEAR PUERTO DE LUNA, NM')
 ```
 
 
